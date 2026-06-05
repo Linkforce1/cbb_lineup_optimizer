@@ -1,0 +1,46 @@
+{
+  "feat_cols": [
+    "wtd_ortg",
+    "wtd_ast_tov",
+    "wtd_usg",
+    "wtd_orb",
+    "wtd_drb",
+    "wtd_blk",
+    "wtd_stl",
+    "usg_var",
+    "fc_3p_rate",
+    "guard_ast",
+    "role_entropy",
+    "n_pure_pg",
+    "n_stretch4",
+    "n_pfc",
+    "n_c",
+    "pair_Pure_PG_Stretch_4",
+    "pair_Pure_PG_PF/C",
+    "pair_Scoring_PG_Stretch_4",
+    "pair_Combo_G_Stretch_4",
+    "pair_Combo_G_PF/C",
+    "pair_Wing_F_Pure_PG"
+  ],
+  "selected_cols": [
+    "wtd_ortg",
+    "wtd_ast_tov",
+    "wtd_orb",
+    "wtd_drb",
+    "wtd_blk",
+    "wtd_stl",
+    "usg_var",
+    "guard_ast",
+    "role_entropy",
+    "n_pure_pg",
+    "n_c"
+  ],
+  "cv_results": {
+    "cv_r2_mean": 0.6452076776148801,
+    "cv_r2_std": 0.017492053382765924,
+    "cv_mae_mean": 6.0928037876404595,
+    "cv_mae_std": 0.5662403434778359
+  },
+  "season": 2026,
+  "team": "Illinois"
+}
