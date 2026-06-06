@@ -1,16 +1,16 @@
-# CBB Lineup Optimizer
+# College Basketball Lineup Optimizer
 
 A Bayesian machine learning system for optimizing college basketball lineups. Trained on 2022–26 D1 team-season data, the model predicts **adjusted efficiency margin (adjEM)** for any 5-man lineup using minute-weighted player attributes and role-synergy features.
 
 Originally built around Illinois basketball, the Streamlit app now supports any D1 team in the dataset.
 
-**[Live App](https://cbb-lineup-optimizer.streamlit.app)**
+**[Live App](https://cbblineupoptimizer.streamlit.app)**
 
 ---
 
 ## How It Works
 
-**Training** ([lineup_model.py](lineup_model.py))
+**Training** ([lineup_model.ipynb](lineup_model.ipynb))
 
 For each team-season, rotation players (≥15% of team minutes) are aggregated into a feature vector capturing:
 
@@ -75,7 +75,7 @@ pip install -r requirements.txt
 **Retrain the model** (optional — a pretrained model is already in `models/`):
 
 ```bash
-python lineup_model.py
+python lineup_model.ipynb
 ```
 
 **Run the app:**
