@@ -45,13 +45,14 @@ SYNERGY_PAIRS = [
 def load_model():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     model_path = os.path.join(current_dir, "..", "models", "lineup_model.pkl")
-    #artifact = joblib.load("../models/lineup_model.pkl")
     artifact = joblib.load(model_path)
     return artifact["pipeline"], artifact["feat_cols"]
 
 @st.cache_data
 def load_all_players():
-    df = pd.read_csv("../data/player_data_2026.csv")
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(current_dir, "..", "data", "player_data_2026.csv")
+    df = pd.read_csv(data_path)
     df = df.rename(columns={" bpm": "bpm", " obpm": "obpm", " dbpm": "dbpm"})
     df['TPAR'] = df['TPA'] / (df['TPA'] + df['twoPA'])
     return df
@@ -65,7 +66,9 @@ def get_roster(all_players: pd.DataFrame, team: str) -> pd.DataFrame:
 
 @st.cache_data
 def load_metadata():
-    with open("../models/model_metadata.json") as f:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    metadata_path = os.path.join(current_dir, "..", "models", "model_metadata.json")
+    with open(metadata_path) as f:
         return json.load(f)
 
 pipeline, feat_cols = load_model()
