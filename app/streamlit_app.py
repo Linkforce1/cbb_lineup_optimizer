@@ -1,11 +1,6 @@
 """
 Illinois Basketball Lineup Synergy Optimizer
 Streamlit App
-
-Setup:
-  1. Run lineup_model.py first to generate lineup_model.pkl
-  2. pip install streamlit pandas numpy scikit-learn matplotlib seaborn joblib plotly
-  3. streamlit run streamlit_app.py
 """
 
 import joblib
