@@ -18,7 +18,7 @@ from itertools import combinations
 import json
 import math
 
-# ── PAGE CONFIG ───────────────────────────────────────────────────────────────
+# PAGE CONFIG
 
 st.set_page_config(
     page_title="Illinois Lineup Optimizer",
@@ -28,7 +28,7 @@ st.set_page_config(
 )
 
 
-# ── CONSTANTS ─────────────────────────────────────────────────────────────────
+# CONSTANTS 
 MIN_PCT_THRESHOLD = 15.0
 FRONTCOURT_ROLES = {"Stretch 4", "PF/C", "C"}
 GUARD_ROLES      = {"Pure PG", "Scoring PG", "Combo G"}
@@ -44,7 +44,7 @@ SYNERGY_PAIRS = [
     ("Wing F",     "Pure PG"),
 ]
 
-# ── LOAD ARTIFACTS (after set_page_config) ────────────────────────────────────
+# LOAD ARTIFACTS 
 @st.cache_resource
 def load_model():
     artifact = joblib.load("../models/lineup_model.pkl")
@@ -87,9 +87,8 @@ def build_lineup_features(lineup_players: pd.DataFrame) -> dict:
     denom = grp['TPA'] + grp['twoPA']
     grp['TPAR'] = np.where(denom > 0, grp['TPA'] / denom, 0.0)
 
-    # Re-weight minutes to sum to 1 within this lineup
     if grp["Min_per"].sum() == 0:
-        grp["Min_per"] = 1.0  # equal weighting fallback
+        grp["Min_per"] = 1.0 
     w = grp["Min_per"] / grp["Min_per"].sum()
 
     wtd_obpm  = (grp["obpm"]    * w).sum()
@@ -151,8 +150,6 @@ def predict_lineup(pipeline, feat_cols: list, lineup_players: pd.DataFrame):
     feats = build_lineup_features(lineup_players)
     X = np.array([[feats.get(c, 0.0) for c in feat_cols]])
     X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0) 
-
-    # BayesianRidge exposes posterior std via return_std
     scaler = pipeline.named_steps["scaler"]
     selector = pipeline.named_steps["feature_selection"]
     model  = pipeline.named_steps["model"]
@@ -199,7 +196,7 @@ def make_label(players_str):
             short.append(n)
     return " / ".join(short)
 
-# ── THEME ─────────────────────────────────────────────────────────────────────
+# THEME 
 
 st.markdown("""
 <style>
@@ -367,7 +364,7 @@ html, body, [class*="css"] {
 </style>
 """, unsafe_allow_html=True)
 
-# ── SIDEBAR ───────────────────────────────────────────────────────────────────
+# SIDEBAR
 
 with st.sidebar:
     st.markdown("### ⚙️ Settings")
@@ -430,9 +427,7 @@ tab1, tab2, tab3, tab4 = st.tabs([
     "🏀 Portal Simulator",
 ])
 
-# ════════════════════════════════════════════════════════════════════════════
 # TAB 1 — LINEUP RANKINGS
-# ════════════════════════════════════════════════════════════════════════════
 
 with tab1:
     st.markdown('<div class="section-title">All Possible Lineups — Ranked by Projected adjEM</div>',
@@ -450,8 +445,10 @@ with tab1:
 
     # Summary metrics
     best  = rankings.iloc[0]
-    worst = rankings.iloc[-1]
-    spread = best["pred_adjEM"] - worst["pred_adjEM"]
+    avg = rankings['pred_adjEM'].mean()
+    cutoff = rankings['pred_adjEM'].quantile(0.9)
+    top_10_avg = rankings[rankings['pred_adjEM']>cutoff]['pred_adjEM'].mean()
+    #spread = best["pred_adjEM"] - worst["pred_adjEM"]
 
     c1, c2, c3, c4 = st.columns(4)
     with c1:
@@ -464,22 +461,23 @@ with tab1:
     with c2:
         st.markdown(f"""
         <div class="metric-card">
-            <div class="label">Worst Lineup adjEM</div>
-            <div class="value">+{worst['pred_adjEM']:.1f}</div>
+            <div class="label">Average Lineup adjEM</div>
+            <div class="value">+{avg:.1f}</div>
             <div class="sub">Projected efficiency margin</div>
         </div>""", unsafe_allow_html=True)
     with c3:
         st.markdown(f"""
         <div class="metric-card">
-            <div class="label">Lineup Spread</div>
-            <div class="value">{spread:.1f}</div>
-            <div class="sub">Best minus worst adjEM</div>
+            <div class="label">Top 10% Lineup Average</div>
+            <div class="value">{top_10_avg:.1f}</div>
+            <div class="sub">Projected efficiency margin</div>
         </div>""", unsafe_allow_html=True)
     with c4:
         st.markdown(f"""
         <div class="metric-card">
             <div class="label">Total Lineups</div>
             <div class="value">{n_combos}</div>
+            <div class="sub"> Calculated based on {len(roster)} rotation players</div>
         </div>""", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
@@ -557,10 +555,9 @@ with tab1:
         mime="text/csv",
     )
 
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 2 — WHAT-IF SIMULATOR
-# ════════════════════════════════════════════════════════════════════════════
 
+# TAB 2 — WHAT-IF SIMULATOR
+ 
 with tab2:
     st.markdown('<div class="section-title">Build Any 5-Man Lineup</div>',
                 unsafe_allow_html=True)
@@ -695,9 +692,8 @@ with tab2:
     else:
         st.info("Select 5 players to get started.")
 
-# ════════════════════════════════════════════════════════════════════════════
+
 # TAB 3 — SYNERGY EXPLORER
-# ════════════════════════════════════════════════════════════════════════════
 
 with tab3:
     st.markdown('<div class="section-title">Role Synergy Heatmap</div>',
@@ -812,9 +808,7 @@ with tab3:
 
     st.dataframe(impact_df, use_container_width=True, hide_index=True)
 
-# ════════════════════════════════════════════════════════════════════════════
 # TAB 4 — PORTAL SIMULATOR
-# ════════════════════════════════════════════════════════════════════════════
 
 with tab4:
     st.markdown('<div class="section-title">Transfer Portal Fit Analyzer</div>',
