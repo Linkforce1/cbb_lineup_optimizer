@@ -10,7 +10,7 @@ Originally built around Illinois basketball, the Streamlit app now supports any 
 
 ## How It Works
 
-**Training** ([lineup_model.ipynb](lineup_model.ipynb))
+**Training**
 
 For each team-season, rotation players (≥15% of team minutes) are aggregated into a feature vector capturing:
 
@@ -30,7 +30,7 @@ At prediction time, the same feature engineering runs on any group of 5 players 
 
 ## App Features
 
-The Streamlit app ([app/streamlit_app.py](app/streamlit_app.py)) has four tabs:
+The Streamlit app has four tabs:
 
 | Tab | Description |
 |---|---|
