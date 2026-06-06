@@ -12,6 +12,7 @@ import streamlit as st
 from itertools import combinations
 import json
 import math
+import os
 
 # PAGE CONFIG
 
@@ -42,7 +43,10 @@ SYNERGY_PAIRS = [
 # LOAD ARTIFACTS 
 @st.cache_resource
 def load_model():
-    artifact = joblib.load("../models/lineup_model.pkl")
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(current_dir, "..", "models", "lineup_model.pkl")
+    #artifact = joblib.load("../models/lineup_model.pkl")
+    artifact = joblib.load(model_path)
     return artifact["pipeline"], artifact["feat_cols"]
 
 @st.cache_data
