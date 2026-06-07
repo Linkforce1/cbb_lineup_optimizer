@@ -60,7 +60,6 @@ CBB_Lineup_Optimization/
 │   └── lineup_model.ipynb     # EDA and model development notebook
 ├── writeup/
 │   └── illinois_lineup_optimizer_writeup.docx
-├── lineup_model.py            # Training script
 └── requirements.txt
 ```
 
@@ -75,7 +74,7 @@ pip install -r requirements.txt
 **Retrain the model** (optional — a pretrained model is already in `models/`):
 
 ```bash
-python lineup_model.ipynb
+lineup_model.ipynb
 ```
 
 **Run the app:**
