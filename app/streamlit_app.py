@@ -401,7 +401,7 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown(
-        "<div style='font-size:0.7rem;color:rgba(255,255,255,0.4)'>"
+        "<div style='font-size:0.7rem;color:rgba(255,255,255,1)'>"
         f"Roster only contains players that played at least {MIN_PCT_THRESHOLD}% of the team's minutes.<br>"
         "Model trained on 2022–26 D1 team-seasons.<br>"
         "Predicts adjEM from minute-weighted player attributes + role synergy features.<br>"
@@ -457,14 +457,14 @@ with tab1:
         st.markdown(f"""
         <div class="metric-card">
             <div class="label">Best Lineup adjEM</div>
-            <div class="value">+{best['pred_adjEM']:.1f}</div>
+            <div class="value">{best['pred_adjEM']:.1f}</div>
             <div class="sub">Projected efficiency margin</div>
         </div>""", unsafe_allow_html=True)
     with c2:
         st.markdown(f"""
         <div class="metric-card">
             <div class="label">Average Lineup adjEM</div>
-            <div class="value">+{avg:.1f}</div>
+            <div class="value">{avg:.1f}</div>
             <div class="sub">Projected efficiency margin</div>
         </div>""", unsafe_allow_html=True)
     with c3:
@@ -598,11 +598,11 @@ with tab2:
                 </div>
                 <div class="sub">95% CI: [{lower:.1f}, {upper:.1f}]</div>
                 <div class="sub" style="margin-top:0.5rem">
-                    σ = {std:.2f} &nbsp;·&nbsp; Uncertainty: {"Low" if std < 1.5 else "Medium" if std < 2.5 else "High"}
+                    σ = {std:.2f} 
                 </div>
             </div>""", unsafe_allow_html=True)
 
-            # Rank among all 56
+            # Rank among all
             rank_pos = (rankings["pred_adjEM"] > mean).sum() + 1
             st.markdown(f"""
             <div class="metric-card" style="margin-top:1rem">
@@ -639,7 +639,7 @@ with tab2:
                 fc_players = lineup_df[lineup_df["role"].isin(FRONTCOURT_ROLES)]
                 if len(fc_players) > 0:
                     avg_fc_3p = fc_players["TP_per"].mean()
-                    if avg_fc_3p < 25:
+                    if avg_fc_3p < 30:
                         st.warning(
                             f"⚠️ **Limited spacing:** Frontcourt avg 3PT% is {avg_fc_3p:.0f}%. "
                             "Consider adding a stretch big to open driving lanes."
@@ -849,6 +849,7 @@ with tab4:
                                              options=portal_options)
         portal_idx = portal_options.index(selected_portal_label)
         portal_player = portal_pool.iloc[[portal_idx]].copy()
+        portal_player['TP_per'] = portal_player['TP_per']*100
 
         st.markdown("<br>", unsafe_allow_html=True)
 
@@ -912,7 +913,7 @@ with tab4:
             # Spacing value — does frontcourt need shooting?
             portal_tpar = portal_player["TPAR"].values[0] if "TPAR" in portal_player else \
                           portal_player["TPA"].values[0] / max(portal_player["TPA"].values[0] + portal_player["twoPA"].values[0], 1)
-            spacing_value = portal_role in FRONTCOURT_ROLES and portal_tpar > 0.35
+            spacing_value = portal_role in FRONTCOURT_ROLES and portal_tpar > 0.30
             st.markdown(f"""
             <div class="metric-card">
                 <div class="label">Spacing Value</div>
