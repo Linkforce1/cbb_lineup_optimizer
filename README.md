@@ -59,7 +59,7 @@ CBB_Lineup_Optimization/
 ├── notebooks/
 │   └── lineup_model.ipynb     # EDA and model development notebook
 ├── writeup/
-│   └── illinois_lineup_optimizer_writeup.docx
+│   └── illinois_lineup_optimizer_writeup.pdf
 └── requirements.txt
 ```
 
